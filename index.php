@@ -173,10 +173,12 @@ function process_one()
     file_put_contents("last_update_id", $update_id + 1);
 }
 // process_one();
-while (true) {
-    process_one();
-    sleep(1);
-}
-
+// while (true) {
+//     process_one();
+//     sleep(1);
+// }
+$entityBody = file_get_contents('php://input');
+$pesanditerima = json_decode($entityBody, true);
+process_message($pesanditerima);
    
 ?>
