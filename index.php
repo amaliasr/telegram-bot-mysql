@@ -1,4 +1,12 @@
-<?php $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu"); ?>
+<?php $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu"); 
+$query = "SELECT * FROM wisata";
+    $hasil = mysqli_query($conn,$query);
+    $a=0;
+    while($row = mysqli_fetch_assoc($hasil)) {
+        echo $nama_wisata[$a] = $row["nama_wisata"];
+        $a++;
+    }
+?>
 <!DOCTYPE html>
 <html>
 <head>
