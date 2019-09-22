@@ -1,4 +1,4 @@
-<?php $conn=mysqli_connect("localhost","root","","wisata_batu"); ?>
+<?php $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu"); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -94,10 +94,12 @@ function create_response($text, $message)
         $a++;
     }
 
-    if ($text == $nama_wisata) {
-        return $nama_wisata;
+    if ($text == "/start") {
+        return "Selamat Datang di BOT Wisata Batu";
+    }else if($text == $nama_wisata[0]){
+        return "$text";
     }else{
-        return "not found";
+        return "Not Found Words";
     }
     // switch ($text) {
     //     // jika ada permintaan waktu
