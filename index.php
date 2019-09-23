@@ -1,5 +1,5 @@
-<?php $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu"); 
-?>
+<!-- <?php $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu"); 
+?> -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,13 +87,13 @@ function create_response($text, $message)
     $input_wisata = "batu";
     //
    // identifikasi perintah (yakni kata pertama, atau array pertamanya)
-    $query = "SELECT * FROM wisata";
-    $hasil = mysqli_query($conn,$query);
-    $a=0;
-    while($row = mysqli_fetch_assoc($hasil)) {
-        $nama_wisata[$a] = $row["nama_wisata"];
-        $a++;
-    }
+//     $query = "SELECT * FROM wisata";
+//     $hasil = mysqli_query($conn,$query);
+//     $a=0;
+//     while($row = mysqli_fetch_assoc($hasil)) {
+//         $nama_wisata[$a] = $row["nama_wisata"];
+//         $a++;
+//     }
 
 //     if ($text == "/start") {
 //         return "Selamat Datang di BOT Wisata Batu";
@@ -105,15 +105,16 @@ function create_response($text, $message)
     if ($text == "/start") {
         return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
     }else{
-        $query = "SELECT informasi FROM wisata WHERE nama_wisata = '".$text."'";
+        $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu");
+        $query = "SELECT informasi FROM wisata WHERE nama_wisata = '$text'";
         $hasil = mysqli_query($conn,$query);
         if (mysqli_num_rows($hasil)>0){
             while ($has = mysqli_fetch_row($hasil)){
-                 $jawab = $has['0'];
-                 return "$jawab";
+                 $jawab = $has[0];
+                 return "Informasi : ".$jawab;
             }
         }else{
-            return "Your Words was Not Found";
+            return "Result was Not Found, your text is $text";
         }
     }
     // switch ($text) {
