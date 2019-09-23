@@ -67,6 +67,7 @@ function create_response($text, $message)
 
     // inisiasi variable hasil yang mana merupakan hasil olahan pesan
     $hasil = '';  
+    $jawab = '';
     $fromid = $message["from"]["id"]; // variable penampung id user
     $chatid = $message["chat"]["id"]; // variable penampung id chat
     $pesanid= $message['message_id']; // variable penampung id message
@@ -84,29 +85,12 @@ function create_response($text, $message)
     $textur = preg_replace('/\s\s+/', ' ', $text);
     // memecah pesan dalam 2 blok array, kita ambil yang array pertama saja
     $command = explode(' ',$textur,2); 
-    $input_wisata = "batu";
-    //
-   // identifikasi perintah (yakni kata pertama, atau array pertamanya)
-//     $query = "SELECT * FROM wisata";
-//     $hasil = mysqli_query($conn,$query);
-//     $a=0;
-//     while($row = mysqli_fetch_assoc($hasil)) {
-//         $nama_wisata[$a] = $row["nama_wisata"];
-//         $a++;
-//     }
-
-//     if ($text == "/start") {
-//         return "Selamat Datang di BOT Wisata Batu";
-//     }else if($text == $nama_wisata[0]){
-//         return "$text";
-//     }else{
-//         return "Not Found Words";
-//     }
+    
     if ($text == "/start") {
         return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
     }else{
-//         $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu");
-        $conn=mysqli_connect("localhost","root","","wisata_batu");
+        $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu");
+//         $conn=mysqli_connect("localhost","root","","wisata_batu");
         $query = "SELECT informasi FROM wisata WHERE nama_wisata = '$text'";
         $hasil = mysqli_query($conn,$query);
         if (mysqli_num_rows($hasil)>0){
@@ -118,31 +102,7 @@ function create_response($text, $message)
             return "Result was Not Found, your text is $text";
         }
     }
-    // switch ($text) {
-    //     // jika ada permintaan waktu
-    //     case '/time':
-    //     case '/time'.$usernamebot :
-    //         $hasil  = "$namauser, waktu lokal bot sekarang adalah :\n";
-    //         $hasil .= "\xE2\x8C\x9A".date("d M Y")."\nPukul ".date("H:i:s");
-    //         break;
-           
-    //     case '/start':
-    //          $hasil  = "Halo saudara/i $namauser, selamat datang di Wisata Batu Bot
-    //                    berikut list command dari bot ini :
-    //                    => /time --> untuk menampilkan waktu Anda
-    //                    => ketik nama wisata untuk informasi lengkapnya
-    //                    ";
-    //          break;
-         
-    //     case $input_wisata:
-    //          $hasil  = "wah mbatu $text";
-    //          break;
-    //     // balasan default jika pesan tidak di definisikan
-    //     default:
-    //         $hasil = 'Input Anda Tidak Teridentifikasi';
-    //         break;
-    // }
-    // return $hasil;
+   
 }
  
 // jebakan token, klo ga diisi akan mati
