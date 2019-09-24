@@ -1,5 +1,3 @@
-<!-- <?php $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu"); 
-?> -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,8 +87,7 @@ function create_response($text, $message)
     if ($text == "/start") {
         return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
     }else{
-        $conn=mysqli_connect("103.8.79.247","bajukuma","4(;98Ucp7BHhkH","bajukuma_wisatabatu");
-//         $conn=mysqli_connect("localhost","root","","wisata_batu");
+        $conn=mysqli_connect("us-cdbr-iron-east-02.cleardb.net","b922761359a8ef","f2dc7336","heroku_4d1c88e045301e7");
         $query = "SELECT informasi FROM wisata WHERE nama_wisata = '$text'";
         $hasil = mysqli_query($conn,$query);
         if (mysqli_num_rows($hasil)>0){
