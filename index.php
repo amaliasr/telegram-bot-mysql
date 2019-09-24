@@ -83,7 +83,11 @@ function create_response($text, $message)
     $textur = preg_replace('/\s\s+/', ' ', $text);
     // memecah pesan dalam 2 blok array, kita ambil yang array pertama saja
     $command = explode(' ',$textur,2); 
-    $nama_wisata = $text;
+                
+    if ($text == "/start") {
+        return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
+    }else{
+        $nama_wisata = $text;
                 $jum_input = count(explode(" ",$nama_wisata));
                 // pecahan kata2
                 for ($i=0; $i < $jum_input ; $i++) { 
@@ -137,21 +141,7 @@ function create_response($text, $message)
                     }
                     $a++;
                 }
-//     if ($text == "/start") {
-//         return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
-//     }else{
-//         $conn=mysqli_connect("us-cdbr-iron-east-02.cleardb.net","b922761359a8ef","f2dc7336","heroku_4d1c88e045301e7");
-//         $query = "SELECT informasi FROM wisata WHERE nama_wisata = '$text'";
-//         $hasil = mysqli_query($conn,$query);
-//         if (mysqli_num_rows($hasil)>0){
-//             while ($has = mysqli_fetch_row($hasil)){
-//                  $jawab = $has[0];
-//                  return "Informasi : ".$jawab;
-//             }
-//         }else{
-//             return "Result was Not Found, your text is $text";
-//         }
-//     }
+    }
    
 }
  
