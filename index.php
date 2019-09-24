@@ -83,22 +83,75 @@ function create_response($text, $message)
     $textur = preg_replace('/\s\s+/', ' ', $text);
     // memecah pesan dalam 2 blok array, kita ambil yang array pertama saja
     $command = explode(' ',$textur,2); 
-    
-    if ($text == "/start") {
-        return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
-    }else{
-        $conn=mysqli_connect("us-cdbr-iron-east-02.cleardb.net","b922761359a8ef","f2dc7336","heroku_4d1c88e045301e7");
-        $query = "SELECT informasi FROM wisata WHERE nama_wisata = '$text'";
-        $hasil = mysqli_query($conn,$query);
-        if (mysqli_num_rows($hasil)>0){
-            while ($has = mysqli_fetch_row($hasil)){
-                 $jawab = $has[0];
-                 return "Informasi : ".$jawab;
-            }
-        }else{
-            return "Result was Not Found, your text is $text";
-        }
-    }
+    $nama_wisata = $text;
+                $jum_input = count(explode(" ",$nama_wisata));
+                // pecahan kata2
+                for ($i=0; $i < $jum_input ; $i++) { 
+                    $input[$i] = explode(" ",$nama_wisata)[$i];
+                }
+                $query2 = "SELECT * FROM wisata";
+                $hasil2 = mysqli_query($conn,$query2);
+                $a = 1;
+                $b = 0;
+                while($row2 = mysqli_fetch_assoc($hasil2)) {
+                    $jumlah_char[$b++] = count(explode(" ",$row2["nama_wisata"]));
+                }
+
+                $query3 = "SELECT * FROM wisata";
+                $hasil3 = mysqli_query($conn,$query3);
+                $c = 0;
+                while($row3 = mysqli_fetch_assoc($hasil3)){
+                    $id_wisata = $row3["idwisata"];
+                    $total = 0;
+                    $jum_query[$id_wisata] = count(explode(" ",$row3["nama_wisata"]));
+
+                    // pecahan kata2 query per row
+                    $suku_sama = 0;
+                    for ($i=0; $i < $jum_query[$id_wisata];$i++) { 
+                        $querys[$i] = explode(" ",$row3["nama_wisata"])[$i];
+                        for ($j=0; $j < $jum_input ; $j++) { 
+                            if (ucwords($querys[$i]) == ucwords($input[$j])) {
+                                $suku_sama++;
+                            }
+                        }
+                    }
+                    $jumlah_suku_sama[$id_wisata] = $suku_sama;
+                    // rumus
+                    $total = $jumlah_suku_sama[$id_wisata] /($jum_input + $jumlah_char[$c] - $jumlah_suku_sama[$id_wisata]);
+                    $total_array[$id_wisata] = round($total,3);
+                    $c++;
+                }
+                arsort($total_array);
+                $a = 1;
+                foreach ($total_array as $key => $value) {
+                    if ($a == 1) {
+                        if ($value != 0) {
+                            $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
+                            $hasil = mysqli_query($conn,$query);
+                            while($row = mysqli_fetch_assoc($hasil)){
+                                echo $row["nama_wisata"]." , ".$row["informasi"];
+                            }
+                        }else{
+                            echo "Maaf, alimat $nama_wisata tidak Ditemukan";
+                        }
+                    }
+                    $a++;
+                }
+//     if ($text == "/start") {
+//         return "Selamat Datang di BOT Wisata Batu, untuk mengetahui informasi tentang wisata apa saja di Kota Batu, ketikkan nama wisata yang ingin anda tuju";
+//     }else{
+//         $conn=mysqli_connect("us-cdbr-iron-east-02.cleardb.net","b922761359a8ef","f2dc7336","heroku_4d1c88e045301e7");
+//         $query = "SELECT informasi FROM wisata WHERE nama_wisata = '$text'";
+//         $hasil = mysqli_query($conn,$query);
+//         if (mysqli_num_rows($hasil)>0){
+//             while ($has = mysqli_fetch_row($hasil)){
+//                  $jawab = $has[0];
+//                  return "Informasi : ".$jawab;
+//             }
+//         }else{
+//             return "Result was Not Found, your text is $text";
+//         }
+//     }
    
 }
  
