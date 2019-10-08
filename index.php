@@ -147,6 +147,7 @@ function create_response($text, $message)
                     $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
                         return "Informasi ".$row["nama_wisata"]." : ".$row["informasi"];
+                        return "hha";
                     }
                 }else{
                     return "Kata Anda Tidak Ditemukan, Coba Lagi";
