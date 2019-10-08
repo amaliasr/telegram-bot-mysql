@@ -164,7 +164,7 @@ function create_response($text, $message)
             }
             $a++;
         }
-        return array($kata,$tambahan);
+        return $kata.$tambahan;
     }
    
 }
