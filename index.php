@@ -146,23 +146,25 @@ function create_response($text, $message)
                     $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
                     $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
-                        return "Informasi ".$row["nama_wisata"]." : ".$row["informasi"];
-                        return "hha";
+                        $kata = "Informasi ".$row["nama_wisata"]." : ".$row["informasi"];
                     }
                 }else{
-                    return "Kata Anda Tidak Ditemukan, Coba Lagi";
+                    $kata = "Kata Anda Tidak Ditemukan, Coba Lagi";
                 }
             }elseif ($nilai_tertinggi == $value) {
                 if ($value != 0) {
                     $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
                     $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
-                        return "Temuan Lainnya : ".$row["nama_wisata"]." , ".$row["informasi"];
+                        $tambahan = "Temuan Lainnya : ".$row["nama_wisata"]." , ".$row["informasi"];
                     }
+                }else{
+                    $tambahan = "";
                 }
             }
             $a++;
         }
+        return array($kata,$tambahan);
     }
    
 }
