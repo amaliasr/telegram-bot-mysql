@@ -130,7 +130,7 @@ function create_response($text, $message)
             if ($b==1) {
                 // if ($value != 0) {
                     $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
-                    $hasil = mysqli_query($con,$query);
+                    $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
                         $id_tertinggi = $row["idwisata"];
                         $nilai_tertinggi = $value;
@@ -154,7 +154,7 @@ function create_response($text, $message)
             }elseif ($nilai_tertinggi == $value) {
                 if ($value != 0) {
                     $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
-                    $hasil = mysqli_query($con,$query);
+                    $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
                         return "Temuan Lainnya : ".$row["nama_wisata"]." , ".$row["informasi"];
                     }
