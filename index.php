@@ -9,8 +9,8 @@
 </html>
 <?php
 //isikan token dan nama botmu yang di dapat dari bapak bot :
-$TOKEN      = "936352772:AAGnW442bLHmBgP34kmSfUvIibx83nkJmzk"; // ganti dengan token bot anda
-$usernamebot= "@WisataBatuBot"; // sesuaikan besar kecilnya, bermanfaat nanti jika bot dimasukkan grup.
+$TOKEN      = "780751210:AAFvkUEJAkjM9S3LAZ30-W9RwAZDkP_dekY"; // ganti dengan token bot anda
+$usernamebot= "@RaraCobaBot"; // sesuaikan besar kecilnya, bermanfaat nanti jika bot dimasukkan grup.
 // aktifkan ini jika perlu debugging
 $debug = false;
  
@@ -125,6 +125,20 @@ function create_response($text, $message)
             $c++;
         }
         arsort($total_array);
+        $b = 1;
+        foreach ($total_array as $key => $value) {
+            if ($b==1) {
+                // if ($value != 0) {
+                    $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
+                    $hasil = mysqli_query($con,$query);
+                    while($row = mysqli_fetch_assoc($hasil)){
+                        $id_tertinggi = $row["idwisata"];
+                        $nilai_tertinggi = $value;
+                    }
+                // }
+            }
+            $b++;
+        }
         $a = 1;
         foreach ($total_array as $key => $value) {
             if ($a == 1) {
@@ -136,6 +150,14 @@ function create_response($text, $message)
                     }
                 }else{
                     return "Kata Anda Tidak Ditemukan, Coba Lagi";
+                }
+            }elseif ($nilai_tertinggi == $value) {
+                if ($value != 0) {
+                    $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
+                    $hasil = mysqli_query($con,$query);
+                    while($row = mysqli_fetch_assoc($hasil)){
+                        return "Temuan Lainnya : ".$row["nama_wisata"]." , ".$row["informasi"];
+                    }
                 }
             }
             $a++;
