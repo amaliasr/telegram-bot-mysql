@@ -99,7 +99,7 @@ function create_response($text, $message)
         $a = 1;
         $b = 0;
         while($row2 = mysqli_fetch_assoc($hasil2)) {
-            $jumlah_char[$b++] = count(explode(" ",$row2["nama_wisata"]));
+            $jumlah_char[$b++] = count(explode(" ",$row2["informasi"]));
         }
         $query3 = "SELECT * FROM wisata";
         $hasil3 = mysqli_query($conn,$query3);
@@ -107,11 +107,11 @@ function create_response($text, $message)
         while($row3 = mysqli_fetch_assoc($hasil3)){
             $id_wisata = $row3["idwisata"];
             $total = 0;
-            $jum_query[$id_wisata] = count(explode(" ",$row3["nama_wisata"]));
+            $jum_query[$id_wisata] = count(explode(" ",$row3["informasi"]));
             // pecahan kata2 query per row
             $suku_sama = 0;
             for ($i=0; $i < $jum_query[$id_wisata];$i++) { 
-                $querys[$i] = explode(" ",$row3["nama_wisata"])[$i];
+                $querys[$i] = explode(" ",$row3["informasi"])[$i];
                     for ($j=0; $j < $jum_input ; $j++) { 
                         if (ucwords($querys[$i]) == ucwords($input[$j])) {
                             $suku_sama++;
