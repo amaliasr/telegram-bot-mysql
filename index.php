@@ -99,7 +99,7 @@ function create_response($text, $message)
         $a = 1;
         $b = 0;
         while($row2 = mysqli_fetch_assoc($hasil2)) {
-            $jumlah_char[$b++] = count(explode(" ",$row2["pertanyaan"]));
+            $jumlah_char[$b++] = count(explode(" ",$row2["pertanyaan"])) + count(explode(" ",$row2["jawaban"]));
         }
         $query3 = "SELECT * FROM datawisata";
         $hasil3 = mysqli_query($conn,$query3);
@@ -108,12 +108,21 @@ function create_response($text, $message)
             $id_wisata = $row3["iddatawisata"];
             $total = 0;
             $jum_query[$id_wisata] = count(explode(" ",$row3["pertanyaan"]));
+            $jum_query_jwb[$id_wisata] = count(explode(" ",$row3["jawaban"]));
             // pecahan kata2 query per row
             $suku_sama = 0;
             for ($i=0; $i < $jum_query[$id_wisata];$i++) { 
                 $querys[$i] = explode(" ",$row3["pertanyaan"])[$i];
                     for ($j=0; $j < $jum_input ; $j++) { 
                         if (ucwords($querys[$i]) == ucwords($input[$j])) {
+                            $suku_sama++;
+                        }
+                    }
+            }
+            for ($i=0; $i < $jum_query_jwb[$id_wisata];$i++) { 
+                $querys_jwb[$i] = explode(" ",$row3["jawaban"])[$i];
+                    for ($j=0; $j < $jum_input ; $j++) { 
+                        if (ucwords($querys_jwb[$i]) == ucwords($input[$j])) {
                             $suku_sama++;
                         }
                     }
