@@ -111,7 +111,7 @@ function create_response($text, $message)
             // pecahan kata2 query per row
             $suku_sama = 0;
             for ($i=0; $i < $jum_query[$id_wisata];$i++) { 
-                $querys[$i] = explode(" ",$row3["informasi"])[$i];
+                $querys[$i] = explode(" ",$row3["pertanyaan"])[$i];
                     for ($j=0; $j < $jum_input ; $j++) { 
                         if (ucwords($querys[$i]) == ucwords($input[$j])) {
                             $suku_sama++;
