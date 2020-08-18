@@ -94,30 +94,20 @@ function create_response($text, $message)
         for ($i=0; $i < $jum_input ; $i++) { 
             $input[$i] = explode(" ",$nama_wisata)[$i];
         }
-        $query2 = "SELECT * FROM wisata";
-        $hasil2 = mysqli_query($conn,$query2);
-        $a = 1;
-        $b = 0;
-        while($row2 = mysqli_fetch_assoc($hasil2)) {
-            $jumlah_char[$b++] = count(explode(" ",$row2["informasi"]));
-        }
-        
-        // pertanyaan jawaban
         $query2 = "SELECT * FROM datawisata";
         $hasil2 = mysqli_query($conn,$query2);
         $a = 1;
         $b = 0;
         while($row2 = mysqli_fetch_assoc($hasil2)) {
-            $jumlah_char_tanya[$b++] = count(explode(" ",$row2["pertanyaan"]));
+            $jumlah_char[$b++] = count(explode(" ",$row2["pertanyaan"]));
         }
-        
-        $query3 = "SELECT * FROM wisata";
+        $query3 = "SELECT * FROM datawisata";
         $hasil3 = mysqli_query($conn,$query3);
         $c = 0;
         while($row3 = mysqli_fetch_assoc($hasil3)){
-            $id_wisata = $row3["idwisata"];
+            $id_wisata = $row3["iddatawisata"];
             $total = 0;
-            $jum_query[$id_wisata] = count(explode(" ",$row3["informasi"]));
+            $jum_query[$id_wisata] = count(explode(" ",$row3["pertanyaan"]));
             // pecahan kata2 query per row
             $suku_sama = 0;
             for ($i=0; $i < $jum_query[$id_wisata];$i++) { 
@@ -134,126 +124,47 @@ function create_response($text, $message)
             $total_array[$id_wisata] = round($total,3);
             $c++;
         }
-
         arsort($total_array);
-        
-        // pertanyaan
-        $query3 = "SELECT * FROM datawisata";
-        $hasil3 = mysqli_query($conn,$query3);
-        $c = 0;
-        while($row3 = mysqli_fetch_assoc($hasil3)){
-            $id_data_wisata = $row3["iddatawisata"];
-            $total = 0;
-            $jum_query[$id_data_wisata] = count(explode(" ",$row3["pertanyaan"]));
-            // pecahan kata2 query per row
-            $suku_sama = 0;
-            for ($i=0; $i < $jum_query[$id_data_wisata];$i++) { 
-                $querys[$i] = explode(" ",$row3["pertanyaan"])[$i];
-                    for ($j=0; $j < $jum_input ; $j++) { 
-                        if (ucwords($querys[$i]) == ucwords($input[$j])) {
-                            $suku_sama++;
-                        }
-                    }
-            }
-            $jumlah_suku_sama[$id_data_wisata] = $suku_sama;
-            // rumus
-            $total = $jumlah_suku_sama[$id_data_wisata] /($jum_input + $jumlah_char[$c] - $jumlah_suku_sama[$id_data_wisata]);
-            $total_array_tanya[$id_data_wisata] = round($total,3);
-            $c++;
-        }
-        arsort($total_array_tanya);
-        
         $b = 1;
         foreach ($total_array as $key => $value) {
             if ($b==1) {
                 // if ($value != 0) {
-                    $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
+                    $query = "SELECT * FROM datawisata WHERE iddatawisata = '$key'";
                     $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
-                        $id_tertinggi = $row["idwisata"];
+                        $id_tertinggi = $row["iddatawisata"];
                         $nilai_tertinggi = $value;
                     }
                 // }
             }
             $b++;
         }
-        
-        //pertanyaan
-        $b = 1;
-        foreach ($total_array_tanya as $key => $value) {
-            if ($b==1) {
-                // if ($value != 0) {
+        $a = 1;
+        foreach ($total_array as $key => $value) {
+            if ($a == 1) {
+                if ($value != 0) {
                     $query = "SELECT * FROM datawisata WHERE iddatawisata = '$key'";
                     $hasil = mysqli_query($conn,$query);
                     while($row = mysqli_fetch_assoc($hasil)){
-                        $id_tertinggi_tanya = $row["iddatawisata"];
-                        $nilai_tertinggi_tanya = $value;
+                        $kata = "Informasi ".$row["pertanyaan"]." : ".$row["jawaban"]."\n";
                     }
-                // }
-            }
-            $b++;
-        }
-        
-        if($nilai_tertinggi > $nilai_tertinggi_tanya){
-            //start
-            $a = 1;
-            foreach ($total_array as $key => $value) {
-                if ($a == 1) {
-                    if ($value != 0) {
-                        $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
-                        $hasil = mysqli_query($conn,$query);
-                        while($row = mysqli_fetch_assoc($hasil)){
-                            $kata = "Informasi ".$row["nama_wisata"]." : ".$row["informasi"]."\n";
-                        }
-                    }else{
-                        $kata = "Kata Anda Tidak Ditemukan, Coba Lagi";
-                    }
-                }elseif ($nilai_tertinggi == $value) {
-                    if ($value != 0) {
-                        $query = "SELECT * FROM wisata WHERE idwisata = '$key'";
-                        $hasil = mysqli_query($conn,$query);
-                        while($row = mysqli_fetch_assoc($hasil)){
-                            $tambahan .= "Temuan Lainnya : ".$row["nama_wisata"]." , ".$row["informasi"]."\n";
-                        }
-                    }else{
-                        $tambahan = "";
-                    }
+                }else{
+                    $kata = "Kata Anda Tidak Ditemukan, Coba Lagi";
                 }
-                $a++;
-            }
-            return $kata.$tambahan;
-            //end
-        }else{
-            //start
-            $a = 1;
-            foreach ($total_array as $key => $value) {
-                if ($a == 1) {
-                    if ($value != 0) {
-                        $query = "SELECT * FROM datawisata WHERE iddatawisata = '$key'";
-                        $hasil = mysqli_query($conn,$query);
-                        while($row = mysqli_fetch_assoc($hasil)){
-                            $kata = "Pertanyaan ".$row["pertanyaan"]." : ".$row["jawaban"]."\n";
-                        }
-                    }else{
-                        $kata = "Kata Anda Tidak Ditemukan, Coba Lagi";
+            }elseif ($nilai_tertinggi == $value) {
+                if ($value != 0) {
+                    $query = "SELECT * FROM datawisata WHERE iddatawisata = '$key'";
+                    $hasil = mysqli_query($conn,$query);
+                    while($row = mysqli_fetch_assoc($hasil)){
+                        $tambahan .= "Temuan Lainnya : ".$row["pertanyaan"]." , ".$row["jawaban"]."\n";
                     }
-                }elseif ($nilai_tertinggi_tanya == $value) {
-                    if ($value != 0) {
-                        $query = "SELECT * FROM datawisata WHERE iddatawisata = '$key'";
-                        $hasil = mysqli_query($conn,$query);
-                        while($row = mysqli_fetch_assoc($hasil)){
-                            $tambahan .= "Temuan Lainnya : ".$row["pertanyaan"]." , ".$row["jawaban"]."\n";
-                        }
-                    }else{
-                        $tambahan = "";
-                    }
+                }else{
+                    $tambahan = "";
                 }
-                $a++;
             }
-            return $kata.$tambahan;
-            //end
+            $a++;
         }
-        
+        return $kata.$tambahan;
     }
    
 }
